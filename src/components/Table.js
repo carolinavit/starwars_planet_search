@@ -1,11 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { PlanetContext } from '../context/PlanetContext';
 
 export default function Table() {
-  const { planets, fetchAPI } = useContext(PlanetContext);
-  fetchAPI();
+  const { planets } = useContext(PlanetContext);
+  const [filterName, setFilterName] = useState('');
+
+  const filteredNames = planets.filter((planet) => planet.name.includes(filterName));
+
   return (
     <div>
+      <div>
+        <input
+          type="text"
+          data-testid="name-filter"
+          placeholder="Buscar"
+          onChange={ (e) => setFilterName(e.target.value) }
+        />
+      </div>
       <table>
         <thead>
           <tr>
@@ -25,7 +36,7 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {planets.map((e) => (
+          {filteredNames.map((e) => (
             <tr key={ e.name }>
               <td>{e.name}</td>
               <td>{e.rotation_period}</td>
