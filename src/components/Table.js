@@ -44,6 +44,7 @@ export default function Table() {
 
   return (
     <div>
+      <h1 data-testid="table-title">Star Wars</h1>
       <div>
         <input
           type="text"
@@ -89,14 +90,13 @@ export default function Table() {
           Filtrar
         </button>
       </div>
-
       <table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Rotation Period</th>
             <th>Orbital Period</th>
-            <th>Diameter</th>
+            <th data-testid="diameter-column">Diameter</th>
             <th>Climate</th>
             <th>Gravity</th>
             <th>Terrain</th>
