@@ -8,6 +8,7 @@ export default function Table() {
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState('0');
   const [filteredPlanets, setFilteredPlanets] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     const filteredNames = planets.filter((planet) => planet.name.includes(filterName));
@@ -19,28 +20,38 @@ export default function Table() {
   }, [planets]);
 
   const filterPlanets = () => {
-    let filteredPln = [];
+    let crrFiltered = planets;
 
-    if (comparisonFilter === 'maior que') {
-      filteredPln = planets.filter(
-        (planet) => Number(planet[columnFilter]) > Number(valueFilter),
-      );
-    }
+    filters.forEach((filter) => {
+      if (filter.comparisonFilter === 'maior que') {
+        crrFiltered = crrFiltered.filter(
+          (planet) => Number(planet[filter.columnFilter]) > Number(filter.valueFilter),
+        );
+      }
 
-    if (comparisonFilter === 'menor que') {
-      filteredPln = planets.filter(
-        (planet) => Number(planet[columnFilter]) < Number(valueFilter),
-      );
-    }
+      if (filter.comparisonFilter === 'menor que') {
+        crrFiltered = crrFiltered.filter(
+          (planet) => Number(planet[filter.columnFilter]) < Number(filter.valueFilter),
+        );
+      }
 
-    if (comparisonFilter === 'igual a') {
-      filteredPln = planets.filter(
-        (planet) => Number(planet[columnFilter]) === Number(valueFilter),
-      );
-    }
+      if (filter.comparisonFilter === 'igual a') {
+        crrFiltered = crrFiltered.filter(
+          (planet) => Number(planet[filter.columnFilter]) === Number(filter.valueFilter),
+        );
+      }
+    });
 
-    setFilteredPlanets(filteredPln);
+    setFilteredPlanets(crrFiltered);
   };
+
+  const addFilter = () => {
+    setFilters([...filters, { columnFilter, comparisonFilter, valueFilter }]);
+  };
+
+  useEffect(() => {
+    filterPlanets();
+  }, [filters]);
 
   return (
     <div>
@@ -56,6 +67,7 @@ export default function Table() {
       <div>
         <label htmlFor="column">
           <select
+            value={ columnFilter }
             data-testid="column-filter"
             onChange={ (e) => setColumnFilter(e.target.value) }
           >
@@ -68,6 +80,7 @@ export default function Table() {
         </label>
         <label htmlFor="comparison">
           <select
+            value={ comparisonFilter }
             data-testid="comparison-filter"
             onChange={ (e) => setComparisonFilter(e.target.value) }
           >
@@ -82,11 +95,7 @@ export default function Table() {
           value={ valueFilter }
           onChange={ (e) => setValueFilter(e.target.value) }
         />
-        <button
-          type="button"
-          data-testid="button-filter"
-          onClick={ filterPlanets }
-        >
+        <button type="button" data-testid="button-filter" onClick={ addFilter }>
           Filtrar
         </button>
       </div>

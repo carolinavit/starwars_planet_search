@@ -1,10 +1,8 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
-import PlanetsMock from './mocks/PlanetsMock';
 import PlanetProvider from '../context/PlanetProvider';
 import userEvent from '@testing-library/user-event';
-import { toBeInTheDocument } from '@testing-library/jest-dom/dist/matchers';
 
 describe("Testa se tabela renderiza corretamente", () => {
   test("Se aparece o título", () => {
