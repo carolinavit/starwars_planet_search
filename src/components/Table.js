@@ -9,6 +9,13 @@ export default function Table() {
   const [valueFilter, setValueFilter] = useState('0');
   const [filteredPlanets, setFilteredPlanets] = useState([]);
   const [filters, setFilters] = useState([]);
+  const [columnFilterOptions, setColumnFilterOptions] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   useEffect(() => {
     const filteredNames = planets.filter((planet) => planet.name.includes(filterName));
@@ -46,7 +53,16 @@ export default function Table() {
   };
 
   const addFilter = () => {
-    setFilters([...filters, { columnFilter, comparisonFilter, valueFilter }]);
+    if (valueFilter) {
+      setFilters([...filters, { columnFilter, comparisonFilter, valueFilter }]);
+
+      const newcolumnFilterOptions = columnFilterOptions.filter(
+        (option) => option !== columnFilter,
+      );
+
+      setColumnFilterOptions(newcolumnFilterOptions);
+      setColumnFilter(newcolumnFilterOptions[0]);
+    }
   };
 
   useEffect(() => {
@@ -71,11 +87,11 @@ export default function Table() {
             data-testid="column-filter"
             onChange={ (e) => setColumnFilter(e.target.value) }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {columnFilterOptions.map((option) => (
+              <option key={ option } value={ option }>
+                {option}
+              </option>
+            ))}
           </select>
         </label>
         <label htmlFor="comparison">
