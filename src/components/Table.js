@@ -65,6 +65,15 @@ export default function Table() {
     }
   };
 
+  const removeFilter = (filter) => {
+    const newFilters = filters.filter(
+      (crrFilter) => crrFilter.columnFilter !== filter,
+    );
+
+    setColumnFilterOptions([...columnFilterOptions, filter]);
+    setFilters(newFilters);
+  };
+
   useEffect(() => {
     filterPlanets();
   }, [filters]);
@@ -113,6 +122,35 @@ export default function Table() {
         />
         <button type="button" data-testid="button-filter" onClick={ addFilter }>
           Filtrar
+        </button>
+      </div>
+      <div>
+        {filters.map((filter) => (
+          <div style={ { display: 'flex' } } key={ filter.columnFilter }>
+            <p data-testid="filter">
+              {filter.columnFilter}
+              {' '}
+              {filter.comparisonFilter}
+              {' '}
+              {filter.valueFilter}
+              <button onClick={ () => removeFilter(filter.columnFilter) }>x</button>
+            </p>
+          </div>
+        ))}
+        <button
+          data-testid="button-remove-filters"
+          onClick={ () => {
+            setFilters([]);
+            setColumnFilterOptions([
+              'population',
+              'orbital_period',
+              'diameter',
+              'rotation_period',
+              'surface_water',
+            ]);
+          } }
+        >
+          Remover todas filtragens
         </button>
       </div>
       <table>
